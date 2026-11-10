@@ -1,0 +1,9 @@
+/bin/
+trotamundos
+*.exe
+.env
+*.db
+*.sqlite3
+/vendor/
+.DS_Store
+Thumbs.db
