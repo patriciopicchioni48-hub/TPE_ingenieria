@@ -9,7 +9,6 @@ type FeedbackRequest struct {
 	Accion string `json:"accion"`
 }
 
-// HandleFeedback maneja POST /api/v1/recomendaciones/{id}/feedback
 func HandleFeedback(w http.ResponseWriter, r *http.Request) {
 	recomendacionID := r.PathValue("id")
 
@@ -19,13 +18,10 @@ func HandleFeedback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Simulación de usuario extraído del token JWT (Iteración 5)
 	usuarioMock := "usr-999"
 
-	// Delegamos a la lógica de negocio (Fachada)
 	RegistrarFeedback(usuarioMock, recomendacionID, req.Accion)
 
-	// Devolvemos HTTP 202 Accepted en microsegundos (Cumple QA-01)
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte(`{"status": "procesando en background"}`))
 }
@@ -37,7 +33,6 @@ type Recomendacion struct {
 	MatchScore float64 `json:"match_score"`
 }
 
-// HandleGetRecomendaciones maneja GET /api/v1/recomendaciones
 func HandleGetRecomendaciones(w http.ResponseWriter, r *http.Request) {
 	// Simulamos una lectura ultrarrápida de datos ya pre-calculados por el Worker
 	sugerencias := []Recomendacion{

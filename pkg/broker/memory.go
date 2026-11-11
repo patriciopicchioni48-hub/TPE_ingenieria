@@ -12,7 +12,6 @@ type FeedbackEvent struct {
 // Cola en memoria con un buffer para absorber picos (QA-03)
 var FeedbackQueue = make(chan FeedbackEvent, 1000)
 
-// Publicar encola el evento de forma no bloqueante
 func PublicarFeedback(evento FeedbackEvent) {
 	FeedbackQueue <- evento
 	log.Printf("[BROKER] Evento encolado: %v", evento)

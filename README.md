@@ -2,7 +2,7 @@
 
 Prototipo funcional del sistema de gestión de viajes **Trotamundos**, desarrollado como prueba de concepto para validar las decisiones arquitectónicas tomadas durante el proceso de Diseño Dirigido por Atributos (ADD).
 
-Este prototipo implementa el **Módulo Avanzado de Recomendaciones (Opción A)** dentro de una arquitectura de **Monolito Modular** escrita en Go.
+Este prototipo implementa el **Módulo Avanzado de Recomendaciones ** dentro de una arquitectura de **Monolito Modular** escrita en Go.
 
 ## 🏗️ Decisiones Arquitectónicas Implementadas
 

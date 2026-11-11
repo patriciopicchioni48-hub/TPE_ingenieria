@@ -7,7 +7,6 @@ import (
 	"github.com/emolina62/trotamundos/pkg/broker"
 )
 
-// IniciarMotorAsincrono arranca el consumidor en una goroutine separada
 func IniciarMotorAsincrono() {
 	go func() {
 		log.Println("[WORKER] Motor de recomendaciones esperando eventos...")
