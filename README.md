@@ -4,7 +4,7 @@ Prototipo funcional del sistema de gestión de viajes **Trotamundos**, desarroll
 
 Este prototipo implementa el **Módulo Avanzado de Recomendaciones ** dentro de una arquitectura de **Monolito Modular** escrita en Go.
 
-## 🏗️ Decisiones Arquitectónicas Implementadas
+## Decisiones Arquitectónicas Implementadas
 
 El código fuente materializa los siguientes Registros de Decisiones Arquitectónicas (ADRs):
 
@@ -12,12 +12,12 @@ El código fuente materializa los siguientes Registros de Decisiones Arquitectó
 *   **Spec-Driven Development:** Contrato de la API definido estáticamente en `/docs/api/openapi.yaml`.
 *   **ADR-09 y ADR-11 (Procesamiento Asíncrono):** Uso de un *Message Broker* en memoria y *Workers* en background (goroutines) para procesar el *feedback* del algoritmo de IA sin bloquear los hilos HTTP. Garantiza el cumplimiento de **QA-01 (Latencia < 800ms)** y **QA-03 (Escalabilidad)**.
 
-## ⚙️ Requisitos Previos
+## Requisitos Previos
 
 *   [Docker](https://www.docker.com/) (v24 o superior)
 *   Git
 
-## 🚀 Cómo ejecutar el proyecto
+## Cómo ejecutar el proyecto
 
 El proyecto está completamente contenerizado (Multi-stage build) para garantizar su ejecución en cualquier entorno.
 
@@ -37,11 +37,11 @@ El proyecto está completamente contenerizado (Multi-stage build) para garantiza
    docker compose logs -f api
    ```
 
-## 🧪 Pruebas de Concepto (Demostración de Drivers)
+## Pruebas de Concepto (Demostración de Drivers)
 
 Con el contenedor corriendo, abrí una terminal nueva y ejecutá las siguientes pruebas para validar el cumplimiento de los Atributos de Calidad:
 
-### Prueba 1: Lectura Ultrarrápida (QA-01)
+### Prueba 1: Lectura Rapida (QA-01)
 Demuestra que la consulta de recomendaciones pre-calculadas responde de forma inmediata, cumpliendo con el umbral de 800ms para aplicaciones web.
 
 ```bash
@@ -49,7 +49,7 @@ curl -X GET http://localhost:8080/api/v1/recomendaciones
 ```
 *Resultado esperado:* Retorna inmediatamente un array JSON con las sugerencias.
 
-### Prueba 2: Feedback Asíncrono (Human-in-the-loop)
+### Prueba 2: Feedback Asíncrono 
 Demuestra que al interactuar con una sugerencia, el servidor responde al instante (HTTP 202) y encola el trabajo pesado.
 
 ```bash
