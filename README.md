@@ -2,7 +2,7 @@
 
 Prototipo funcional del sistema de gestión de viajes **Trotamundos**, desarrollado como prueba de concepto para validar las decisiones arquitectónicas tomadas durante el proceso de Diseño Dirigido por Atributos (ADD).
 
-Este prototipo implementa el **Módulo Avanzado de Recomendaciones ** dentro de una arquitectura de **Monolito Modular** escrita en Go.
+Este prototipo implementa el **Módulo Avanzado de Recomendaciones** dentro de una arquitectura de **Monolito Modular** escrita en Go.
 
 ## Decisiones Arquitectónicas Implementadas
 
@@ -23,7 +23,7 @@ El proyecto está completamente contenerizado (Multi-stage build) para garantiza
 
 1. Clonar el repositorio:
    ```bash
-   git clone [https://github.com/patriciopicchioni48-hub/TPE_ingenieria.git](https://github.com/patriciopicchioni48-hub/TPE_ingenieria.git)
+   git clone [https://github.com/patriciopicchioni48-hub/TPE_ingenieria.git] https://github.com/patriciopicchioni48-hub/TPE_ingenieria.git
    cd TPE_ingenieria
    ```
 

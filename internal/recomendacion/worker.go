@@ -7,14 +7,15 @@ import (
 	"github.com/emolina62/trotamundos/pkg/broker"
 )
 
-func IniciarMotorAsincrono() {
-	go func() {
-		log.Println("[WORKER] Motor de recomendaciones esperando eventos...")
-		for evento := range broker.FeedbackQueue {
-			// Simulamos el recálculo pesado del algoritmo de IA
-			log.Printf("[WORKER] Procesando feedback de recomendación %s...", evento.RecomendacionID)
-			time.Sleep(3 * time.Second)
-			log.Printf("[WORKER] Perfil del usuario %s actualizado (Acción: %s)", evento.UsuarioID, evento.Accion)
-		}
-	}()
+func IniciarMotorAsincrono(numWorkers int) {
+	for i := 1; i <= numWorkers; i++ {
+		go func(workerID int) {
+			log.Printf("[WORKER-%d] Motor de recomendaciones esperando eventos...", workerID)
+			for evento := range broker.FeedbackQueue {
+				log.Printf("[WORKER-%d] Procesando feedback de recomendación %s...", workerID, evento.RecomendacionID)
+				time.Sleep(3 * time.Second)
+				log.Printf("[WORKER-%d] Perfil del usuario %s actualizado (Acción: %s)", workerID, evento.UsuarioID, evento.Accion)
+			}
+		}(i)
+	}
 }

@@ -14,14 +14,26 @@ func HandleFeedback(w http.ResponseWriter, r *http.Request) {
 
 	var req FeedbackRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Cuerpo inválido", http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, `{"error": "Cuerpo JSON inválido"}`, http.StatusBadRequest)
+		return
+	}
+
+	if req.Accion != "aceptar" && req.Accion != "rechazar" {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, `{"error": "Acción inválida: debe ser 'aceptar' o 'rechazar'"}`, http.StatusBadRequest)
 		return
 	}
 
 	usuarioMock := "usr-999"
 
-	RegistrarFeedback(usuarioMock, recomendacionID, req.Accion)
+	if !RegistrarFeedback(usuarioMock, recomendacionID, req.Accion) {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, `{"error": "Sistema saturado, intente nuevamente"}`, http.StatusServiceUnavailable)
+		return
+	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte(`{"status": "procesando en background"}`))
 }

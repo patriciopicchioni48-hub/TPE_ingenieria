@@ -5,16 +5,16 @@ import (
 	"net/http"
 
 	"github.com/emolina62/trotamundos/internal/recomendacion"
+	"github.com/emolina62/trotamundos/internal/viajes"
 )
 
 func main() {
-
-	recomendacion.IniciarMotorAsincrono()
+	recomendacion.IniciarMotorAsincrono(3)
 
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("GET /api/v1/viajes", viajes.HandleGetViajes)
 	mux.HandleFunc("POST /api/v1/recomendaciones/{id}/feedback", recomendacion.HandleFeedback)
-
 	mux.HandleFunc("GET /api/v1/recomendaciones", recomendacion.HandleGetRecomendaciones)
 
 	puerto := ":8080"

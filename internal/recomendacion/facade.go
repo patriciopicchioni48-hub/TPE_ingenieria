@@ -5,12 +5,11 @@ import (
 )
 
 // RegistrarFeedback actúa como fachada. No procesa IA, solo encola y devuelve el control.
-func RegistrarFeedback(usuarioID, recomendacionID, accion string) {
+func RegistrarFeedback(usuarioID, recomendacionID, accion string) bool {
 	evento := broker.FeedbackEvent{
 		UsuarioID:       usuarioID,
 		RecomendacionID: recomendacionID,
 		Accion:          accion,
 	}
-	// Enviamos el mensaje al broker de forma asíncrona
-	broker.PublicarFeedback(evento)
+	return broker.PublicarFeedback(evento)
 }
