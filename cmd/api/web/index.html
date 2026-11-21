@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trotamundos — Panel de Viajes y Recomendaciones</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h1 { font-size: 1.6rem; color: var(--primary); }
+    .subtitle { color: var(--muted); font-size: 0.9rem; }
+
+    .metrics-bar {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: #e0e7ff;
+      color: var(--primary);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .panel h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem;
+      margin-bottom: 0.75rem;
+      background: #fafcff;
+    }
+
+    .item-card:last-child { margin-bottom: 0; }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+      gap: 0.5rem;
+    }
+
+    .item-title { font-weight: 600; font-size: 0.98rem; }
+
+    .status-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .status-activo { background: var(--success-bg); color: var(--success); }
+    .status-archivado { background: #e2e8f0; color: #475569; }
+    .score-pill { background: #dbeafe; color: var(--primary); }
+
+    .meta { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem; }
+
+    .actions { display: flex; gap: 0.5rem; }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+
+    button:hover { opacity: 0.9; }
+    .btn-accept { background: var(--success); color: #fff; }
+    .btn-reject { background: var(--danger); color: #fff; }
+    .btn-primary { background: var(--primary); color: #fff; }
+
+    .console {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.82rem;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .log-line { margin-bottom: 0.35rem; }
+    .log-ok { color: #4ade80; }
+    .log-info { color: #38bdf8; }
+    .log-warn { color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Trotamundos</h1>
+        <p class="subtitle">Prototipo Monolito Modular — Validación QA-01 (Latencia) y QA-03 (Asincronía)</p>
+      </div>
+      <div class="metrics-bar">
+        <span class="badge" id="latency-badge">Lectura API: -- ms</span>
+        <button class="btn-primary" onclick="simularPico()">Simular pico (10 requests)</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>Mis Viajes <span class="subtitle">GET /api/v1/viajes</span></h2>
+        <div id="viajes-list">Cargando viajes...</div>
+      </section>
+
+      <section class="panel">
+        <h2>Recomendaciones IA <span class="subtitle">GET /api/v1/recomendaciones</span></h2>
+        <div id="recomendaciones-list">Cargando recomendaciones...</div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>
+        Monitor de Eventos Asíncronos (Broker &amp; Workers)
+        <button class="btn-primary" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;" onclick="limpiarLogs()">Limpiar</button>
+      </h2>
+      <div class="console" id="event-console">
+        <div class="log-line log-info">[UI] Interfaz conectada al servidor Go (:8080).</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function logEvent(msg, type = "info") {
+      const consoleEl = document.getElementById("event-console");
+      const time = new Date().toLocaleTimeString();
+      const line = document.createElement("div");
+      line.className = `log-line log-${type}`;
+      line.textContent = `[${time}] ${msg}`;
+      consoleEl.prepend(line);
+    }
+
+    function limpiarLogs() {
+      document.getElementById("event-console").innerHTML = "";
+    }
+
+    async function cargarDatos() {
+      const t0 = performance.now();
+      try {
+        const [resViajes, resRecs] = await Promise.all([
+          fetch("/api/v1/viajes"),
+          fetch("/api/v1/recomendaciones")
+        ]);
+
+        const viajes = await resViajes.json();
+        const recs = await resRecs.json();
+        const elapsed = (performance.now() - t0).toFixed(1);
+
+        document.getElementById("latency-badge").textContent = `Lectura API: ${elapsed} ms (QA-01 < 800ms)`;
+        logEvent(`Datos cargados en ${elapsed} ms (HTTP 200 OK).`, "ok");
+
+        renderViajes(viajes);
+        renderRecomendaciones(recs);
+      } catch (err) {
+        logEvent(`Error cargando datos: ${err.message}`, "warn");
+      }
+    }
+
+    function renderViajes(viajes) {
+      const container = document.getElementById("viajes-list");
+      container.innerHTML = viajes.map(v => `
+        <div class="item-card">
+          <div class="item-header">
+            <span class="item-title">${v.nombre}</span>
+            <span class="status-pill status-${v.estado}">${v.estado}</span>
+          </div>
+          <div class="meta">ID: ${v.id}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderRecomendaciones(recs) {
+      const container = document.getElementById("recomendaciones-list");
+      container.innerHTML = recs.map(r => `
+        <div class="item-card">
+          <div class="item-header">
+            <span class="item-title">${r.titulo}</span>
+            <span class="status-pill score-pill">Match ${(r.match_score * 100).toFixed(0)}%</span>
+          </div>
+          <div class="meta">ID: ${r.id} • Categoría: ${r.tipo}</div>
+          <div class="actions">
+            <button class="btn-accept" onclick="enviarFeedback('${r.id}', 'aceptar')">Aceptar</button>
+            <button class="btn-reject" onclick="enviarFeedback('${r.id}', 'rechazar')">Rechazar</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function enviarFeedback(id, accion) {
+      const t0 = performance.now();
+      try {
+        const res = await fetch(`/api/v1/recomendaciones/${id}/feedback`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ accion })
+        });
+        const data = await res.json();
+        const elapsed = (performance.now() - t0).toFixed(1);
+
+        if (res.status === 202) {
+          logEvent(`POST /recomendaciones/${id}/feedback (${accion}) -> HTTP 202 Accepted en ${elapsed} ms | "${data.status}" (Worker procesando en background...)`, "ok");
+        } else {
+          logEvent(`POST /recomendaciones/${id}/feedback -> HTTP ${res.status}: ${JSON.stringify(data)}`, "warn");
+        }
+      } catch (err) {
+        logEvent(`Error enviando feedback: ${err.message}`, "warn");
+      }
+    }
+
+    async function simularPico() {
+      logEvent("Iniciando ráfaga de 10 peticiones concurrentes (QA-03)...", "warn");
+      const t0 = performance.now();
+      const requests = Array.from({ length: 10 }, (_, i) =>
+        fetch(`/api/v1/recomendaciones/rec-pico-${i + 1}/feedback`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ accion: "aceptar" })
+        })
+      );
+
+      const responses = await Promise.all(requests);
+      const okCount = responses.filter(r => r.status === 202).length;
+      const elapsed = (performance.now() - t0).toFixed(1);
+
+      logEvent(`Pico absorbido: ${okCount}/10 respondieron HTTP 202 Accepted en ${elapsed} ms total. Mirá los logs de Docker para ver el Worker Pool drenando la cola.`, "ok");
+    }
+
+    document.addEventListener("DOMContentLoaded", cargarDatos);
+  </script>
+</body>
+</html>
