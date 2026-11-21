@@ -23,7 +23,7 @@ El proyecto está completamente contenerizado (Multi-stage build) para garantiza
 
 1. Clonar el repositorio:
    ```bash
-   git clone [https://github.com/patriciopicchioni48-hub/TPE_ingenieria.git] https://github.com/patriciopicchioni48-hub/TPE_ingenieria.git
+   git clone https://github.com/patriciopicchioni48-hub/TPE_ingenieria.git
    cd TPE_ingenieria
    ```
 
