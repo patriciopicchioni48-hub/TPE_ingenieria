@@ -36,6 +36,10 @@ El proyecto está completamente contenerizado (Multi-stage build) para garantiza
    ```bash
    docker compose logs -f api
    ```
+4. Entrar al navegador para poder probar la aplicacion
+   ```bash
+   localhost:8080
+   ```
 
 ## Pruebas de Concepto (Demostración de Drivers)
 
